@@ -2,7 +2,7 @@
 
 **Chapter title:** Assembling Aegis: Integration, Emergence and Enterprise Scale
 
-Planned notebooks:
+Notebooks:
 - `chapter_13_01_aegis_capstone.ipynb`
 - `chapter_13_02_enterprise_graduation.ipynb`
 
