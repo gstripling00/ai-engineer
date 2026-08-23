@@ -2,6 +2,6 @@
 
 **Chapter title:** Security Governance and Enterprise Integration
 
-Planned notebook: `chapter_11_security_governance_enterprise_integration.ipynb`
+Notebook: `chapter_11_security_governance_enterprise_integration.ipynb`
 
 Focus: prompt injection defense, safety filters, PII masking, IAM, least privilege, MCP hardening, auditability, and defense in depth.
