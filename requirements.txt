@@ -1,0 +1,3 @@
+# Shared runtime dependencies for all labs and reusable source modules.
+# Add pinned or bounded versions here as frameworks are introduced by chapter.
+# Do not install libraries ad hoc inside individual notebooks.
