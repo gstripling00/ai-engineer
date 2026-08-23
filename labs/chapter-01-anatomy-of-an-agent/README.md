@@ -4,6 +4,6 @@
 
 This directory contains the Chapter 1 Aegis lab.
 
-Planned notebook: `chapter_01_anatomy_of_an_agent.ipynb`
+Notebook: `chapter_01_anatomy_of_an_agent.ipynb`
 
 Focus: model, tools, memory, orchestration, lifecycle, and the first single-agent SOC workflow.
