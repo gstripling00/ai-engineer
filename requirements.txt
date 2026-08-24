@@ -11,10 +11,21 @@
 # =============================================================================
 
 # --- requests ----------------------------------------------------------------
-# Colab ships requests 2.32.4, but langchain-community 0.3.28+ (pinned below at
-# 0.3.29) declares requests>=2.32.5, so a hard ==2.32.4 pin makes the file
-# unresolvable ("ResolutionImpossible"). A floor lets pip take 2.32.5+; the
-# patch bump over Colab's bundled copy is harmless at runtime.
+# langchain-community 0.3.28+ (pinned below) declares requests>=2.32.5, and the
+# only releases that accept older requests (<=0.3.27) require langchain-core<1.0,
+# which conflicts with our langchain-core pin. So requests cannot be pinned to
+# Colab's bundled 2.32.4 — the file would be unresolvable.
+#
+# Consequence on Colab ONLY: the `google-colab` metadata package pins
+# requests==2.32.4, so pip prints a post-install "requires requests==2.32.4"
+# notice after a successful install. It is cosmetic — Colab runs fine on a
+# newer requests patch — but it looks like an error, so notebooks install with:
+#
+#   !pip -q install --no-warn-conflicts -r requirements.txt
+#
+# That flag suppresses only the post-install conflict report; real resolver
+# failures (ResolutionImpossible) are still raised. Off Colab (local, CI),
+# google-colab isn't installed and `pip check` comes back clean without it.
 requests>=2.32.5,<3
 # =============================================================================
 
