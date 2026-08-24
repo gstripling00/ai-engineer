@@ -1,0 +1,83 @@
+# =============================================================================
+# The Agentic AI Engineer's Guidebook — lab dependencies
+#
+# ONE FILE. Every lab, every notebook, and CI install from this and nothing else.
+# Change a version here and it changes everywhere.
+#
+#   pip install -r requirements.txt
+#
+# Verified together on 2026-07-12: all 95 tests pass in a single environment
+# built from this file. Re-verify with:  python tools/check_env.py
+# =============================================================================
+
+# --- Agent frameworks --------------------------------------------------------
+# The open-source track. The labs use only StateGraph/END — the stable core
+# primitive — deliberately avoiding the prebuilts (create_react_agent et al.)
+# that LangGraph deprecated in v1.0 and removes in v2.0.
+langgraph==1.2.9
+langchain-core==1.4.9
+
+# !! DEFENSIVE PIN — DO NOT REMOVE, AND DO NOT LET A RESOLVER "UPGRADE" IT !!
+#
+# ragas 0.4.3 imports `langchain_community.chat_models.vertexai`, which was
+# removed in langchain-community 0.4.x. Without this pin, pip resolves the file
+# CLEANLY and then `import ragas` dies at runtime with ModuleNotFoundError.
+# A green install followed by a broken import is the worst failure mode there is,
+# so this line is load-bearing. Re-test it before every printing.
+langchain-community==0.3.29
+
+# The Google Cloud track. ADK 2.x is a breaking major over 1.x: `Agent` replaces
+# `LlmAgent`, and `Workflow` replaces the deprecated `SequentialAgent`.
+google-adk==2.4.0
+
+# Tool and agent interoperability (Ch 3 discovery, Ch 9 routing, Ch 11 hardening).
+mcp==1.28.1
+
+# --- Model providers ---------------------------------------------------------
+# Keys come from the environment, never from a notebook cell. See tools/check_env.py.
+openai>=1.60
+langchain-openai>=0.3
+
+# --- Evaluation --------------------------------------------------------------
+# Real RAGAS. Note: BleuScore and ExactMatch are deterministic and need no model;
+# Faithfulness / AnswerRelevancy / ContextPrecision are LLM-judged and DO cost
+# money per call. See Appendix G before running a full golden set.
+ragas==0.4.3
+sacrebleu>=2.4          # required by ragas BleuScore; ragas does not install it
+
+# --- Observability -----------------------------------------------------------
+# Real OpenTelemetry, so Ch 10's tracing is the industry standard rather than a
+# hand-rolled stand-in. Console offline; Langfuse / Cloud Trace / any OTLP
+# collector in production with three environment variables and no code change.
+#
+# !! PIN THE WHOLE OTel FAMILY TOGETHER AT 1.42.1 !!
+# google-adk 2.4.0 declares opentelemetry <=1.42.1. Installing langfuse pulls
+# 1.44.x, which violates that constraint. Our code paths still ran, but shipping
+# a requirements.txt that `pip check` flags is not acceptable in an enterprise
+# environment where that check gates the build. Aligning the exporter packages
+# too (not just api/sdk) is what makes `pip check` come back clean.
+opentelemetry-api==1.42.1
+opentelemetry-sdk==1.42.1
+opentelemetry-proto==1.42.1
+opentelemetry-exporter-otlp-proto-common==1.42.1
+opentelemetry-exporter-otlp-proto-http==1.42.1
+
+# Langfuse: open-source (MIT core), self-hostable LLM observability — traces,
+# prompt versioning, evaluation, cost. Self-hosting is the point for a SOC:
+# incident traces must not leave your estate. v4 is OTel-native, so we depend on
+# OpenTelemetry and treat Langfuse as an exporter target, not an SDK to marry.
+langfuse>=4.14
+
+# --- Retrieval ---------------------------------------------------------------
+# Ch 6 moves off hand-rolled cosine onto the libraries a production RAG stack
+# actually uses.
+chromadb>=0.5           # local vector store, persists to disk, no server
+rank-bm25>=0.2          # sparse retrieval for the hybrid search section (§6.5.2)
+
+# --- Real SOC data formats (Ch 13 enterprise graduation) ---------------------
+# Sigma rules are YAML. Wazuh alerts and MISP events are JSON (stdlib).
+# The adapters in capstone/aegis/soc_formats.py are the whole integration.
+pyyaml>=6.0
+
+# --- Testing -----------------------------------------------------------------
+pytest>=8.0
