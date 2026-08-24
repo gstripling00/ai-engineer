@@ -10,6 +10,11 @@
 # built from this file. Re-verify with:  python tools/check_env.py
 # =============================================================================
 
+# --- Google Colab runtime compatibility --------------------------------------
+# Google Colab currently pins requests to this version.
+requests==2.32.4
+# =============================================================================
+
 # --- Agent frameworks --------------------------------------------------------
 # The open-source track. The labs use only StateGraph/END — the stable core
 # primitive — deliberately avoiding the prebuilts (create_react_agent et al.)
