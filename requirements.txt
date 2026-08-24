@@ -10,9 +10,12 @@
 # built from this file. Re-verify with:  python tools/check_env.py
 # =============================================================================
 
-# --- Google Colab runtime compatibility --------------------------------------
-# Google Colab currently pins requests to this version.
-requests==2.32.4
+# --- requests ----------------------------------------------------------------
+# Colab ships requests 2.32.4, but langchain-community 0.3.28+ (pinned below at
+# 0.3.29) declares requests>=2.32.5, so a hard ==2.32.4 pin makes the file
+# unresolvable ("ResolutionImpossible"). A floor lets pip take 2.32.5+; the
+# patch bump over Colab's bundled copy is harmless at runtime.
+requests>=2.32.5,<3
 # =============================================================================
 
 # --- Agent frameworks --------------------------------------------------------
