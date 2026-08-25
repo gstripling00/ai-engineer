@@ -30,3 +30,4 @@ jobs:
         run: |
           python labs/chapter-03-tools-function-calling-openapi-mcp/compare.py
           python labs/chapter-04-conversational-agents-slot-filling/demo.py
+          python labs/chapter-05-memory/demo.py
