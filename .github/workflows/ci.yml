@@ -26,5 +26,7 @@ jobs:
       - name: Validate Python source
         run: python -m compileall -q src labs
 
-      - name: Smoke-test Chapter 3 lab source
-        run: python labs/chapter-03-tools-function-calling-openapi-mcp/compare.py
+      - name: Smoke-test chapter lab source
+        run: |
+          python labs/chapter-03-tools-function-calling-openapi-mcp/compare.py
+          python labs/chapter-04-conversational-agents-slot-filling/demo.py
