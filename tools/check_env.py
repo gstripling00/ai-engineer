@@ -12,7 +12,8 @@ Mirrors production practice in three ways the labs should model:
      into a notebook cell. This script confirms a key is present WITHOUT ever
      printing it.
 
-    python tools/check_env.py
+    python tools/check_env.py              # dependencies + secrets
+    python tools/check_env.py --chapter 3  # also confirm the chapter's lab folder is present
 """
 import importlib
 import os
@@ -42,8 +43,33 @@ CRITICAL_PIN = ("langchain_community", "0.3.", (
     "     RUNTIME. Fix:  pip install 'langchain-community==0.3.29'"))
 
 
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def check_chapter_source(chapter: int, problems: list) -> None:
+    """Each lab imports from its own labs/chapter-NN-*/ folder. A missing or
+    half-uploaded folder would otherwise surface as a ModuleNotFoundError several
+    cells later; say so here, with the fix."""
+    import glob
+    print("\nlab source")
+    matches = glob.glob(os.path.join(REPO, "labs", f"chapter-{chapter:02d}-*"))
+    folder = os.path.relpath(matches[0], REPO) if matches else f"labs/chapter-{chapter:02d}-*"
+    has_code = any(f.endswith(".py") for f in os.listdir(matches[0])) if matches else False
+    if matches and has_code:
+        print(f"  ok      {folder}/ present, with source")
+    else:
+        why = "not found" if not matches else "present but contains no .py source"
+        print(f"  MISSING {folder}/ {why}")
+        problems.append(f"{folder}/ is missing or incomplete in the repository checkout.\n     "
+                        "The lab imports from it. Pull the latest commit; in Colab, "
+                        "Runtime -> Disconnect and delete runtime, then re-run setup.")
+
+
 def main() -> int:
     problems = []
+    chapter = None
+    if "--chapter" in sys.argv:
+        chapter = int(sys.argv[sys.argv.index("--chapter") + 1])
 
     print("dependencies")
     for name, module, why in REQUIRED:
@@ -83,6 +109,9 @@ def main() -> int:
     tier = os.environ.get("AEGIS_MODEL", "mock")
     print(f"  tier    AEGIS_MODEL={tier}"
           + ("  (deterministic, free, no key)" if tier == "mock" else "  (billable)"))
+
+    if chapter is not None:
+        check_chapter_source(chapter, problems)
 
     if problems:
         print(f"\nFAILED — {len(problems)} problem(s):\n")
