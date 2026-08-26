@@ -33,3 +33,4 @@ jobs:
           python labs/chapter-05-memory/demo.py
           python labs/chapter-06-rag-grounding-aegis/demo.py
           python labs/chapter-07-planning/demo.py
+          python labs/chapter-08-multi-agent-systems/demo.py
