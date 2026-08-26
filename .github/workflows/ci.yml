@@ -38,3 +38,4 @@ jobs:
           python labs/chapter-10-evaluation-and-observability/demo.py
           python labs/chapter-11-security-governance-enterprise-integration/demo.py
           python labs/chapter-12-deployment/demo.py
+          python labs/chapter-13-assembling-aegis/demo.py
