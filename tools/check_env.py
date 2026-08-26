@@ -14,6 +14,7 @@ Mirrors production practice in three ways the labs should model:
 
     python tools/check_env.py              # dependencies + secrets
     python tools/check_env.py --chapter 3  # also confirm the chapter's lab folder is present
+    python tools/check_env.py --chapter 8b # optional labs are lettered
 """
 import importlib
 import os
@@ -46,14 +47,23 @@ CRITICAL_PIN = ("langchain_community", "0.3.", (
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def check_chapter_source(chapter: int, problems: list) -> None:
+def _chapter_slug(chapter) -> str:
+    """3 -> 'chapter-03-*'; '8b' -> 'chapter-08b-*' (optional labs are lettered)."""
+    text = str(chapter).lower()
+    digits = "".join(ch for ch in text if ch.isdigit())
+    suffix = text[len(digits):]
+    return f"chapter-{int(digits):02d}{suffix}-*"
+
+
+def check_chapter_source(chapter, problems: list) -> None:
     """Each lab imports from its own labs/chapter-NN-*/ folder. A missing or
     half-uploaded folder would otherwise surface as a ModuleNotFoundError several
     cells later; say so here, with the fix."""
     import glob
     print("\nlab source")
-    matches = glob.glob(os.path.join(REPO, "labs", f"chapter-{chapter:02d}-*"))
-    folder = os.path.relpath(matches[0], REPO) if matches else f"labs/chapter-{chapter:02d}-*"
+    slug = _chapter_slug(chapter)
+    matches = glob.glob(os.path.join(REPO, "labs", slug))
+    folder = os.path.relpath(matches[0], REPO) if matches else f"labs/{slug}"
     has_code = any(f.endswith(".py") for f in os.listdir(matches[0])) if matches else False
     if matches and has_code:
         print(f"  ok      {folder}/ present, with source")
@@ -69,7 +79,7 @@ def main() -> int:
     problems = []
     chapter = None
     if "--chapter" in sys.argv:
-        chapter = int(sys.argv[sys.argv.index("--chapter") + 1])
+        chapter = sys.argv[sys.argv.index("--chapter") + 1]     # "3", "8b", ...
 
     print("dependencies")
     for name, module, why in REQUIRED:
