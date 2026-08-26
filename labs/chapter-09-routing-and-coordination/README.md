@@ -1,7 +1,12 @@
 # Chapter 9 — Routing and Coordination
 
-**Chapter title:** Routing and Coordination: Getting the Right Agent for the Job
+Notebook: `Aegis_Chapter9_Lab.ipynb` — it adds this folder to `sys.path` and imports
+the modules below.
 
-Notebook: `chapter_09_routing_and_coordination.ipynb`
+| File | What it is |
+|---|---|
+| `routing/router.py` | `ROUTE_DESCRIPTIONS`, `semantic_route`, `route_scores`, `route_with_confidence`, `severity_route`, `route_with_fallback`, `build_escalation` |
+| `routing/mcp_discovery.py` | A real MCP capability server, `discover_routes`, `route_via_discovery` |
+| `demo.py` | Smoke test across every section; CI runs it |
 
-Focus: semantic routing, deterministic branching, confidence gating, graceful degradation, retries, human escalation, and standardized tool/context discovery.
+Run from the repo root: `python labs/chapter-09-routing-and-coordination/demo.py`
