@@ -98,5 +98,12 @@ rank-bm25>=0.2          # sparse retrieval for the hybrid search section (§6.5.
 # The adapters in capstone/aegis/soc_formats.py are the whole integration.
 pyyaml>=6.0
 
+# --- Serving (Optional Lab 12B) ----------------------------------------------
+# google-adk already pulls all three in; declared explicitly because the service and
+# its tests import them directly, and a transitive dependency is not a contract.
+fastapi>=0.110
+uvicorn>=0.30
+httpx>=0.27              # FastAPI's TestClient
+
 # --- Testing -----------------------------------------------------------------
 pytest>=8.0
