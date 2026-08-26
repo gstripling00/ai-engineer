@@ -35,3 +35,4 @@ jobs:
           python labs/chapter-07-planning/demo.py
           python labs/chapter-08-multi-agent-systems/demo.py
           python labs/chapter-09-routing-and-coordination/demo.py
+          python labs/chapter-10-evaluation-and-observability/demo.py
