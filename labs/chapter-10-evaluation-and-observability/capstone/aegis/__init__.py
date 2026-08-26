@@ -1,0 +1,1 @@
+"""aegis — the assembled system."""
