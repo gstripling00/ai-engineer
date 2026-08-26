@@ -1,14 +1,16 @@
-# Optional Lab 8B — The Same Team, Three Ways
+# Chapter 8 — Multi-Agent Systems
 
-Notebook: `Aegis_Chapter8B_Lab.ipynb`. Chapter 8's team — imported from its own folder,
-unchanged — orchestrated by a for-loop, by LangGraph, and by Google ADK 2.x.
+Notebook: `Aegis_Chapter8_Lab.ipynb` — it adds this folder to `sys.path` and imports
+the modules below.
 
 | File | What it is |
 |---|---|
-| `frameworks/team.py` | Imports Chapter 8's workers/tools/envelope; `Result`, envelope <-> dict helpers |
-| `frameworks/scratch_team.py` | `run_scratch` — Chapter 8's loop |
-| `frameworks/langgraph_team.py` | `build_graph`, `run_langgraph`, `checkpoint_history` (MemorySaver) |
-| `frameworks/adk_team.py` | `build_workflow`, `run_adk`, `fan_out_workflow` (JoinNode) |
-| `demo.py` | Asserts all three produce the same verdict, handoffs and audit; CI runs it |
+| `common/soc.py` | The SOC world: `SEED_ALERT`, logs, four tools, `TICKETS` / `reset_tickets` |
+| `common/model.py` | `get_model()` — the `AEGIS_MODEL` seam (mock, or OpenAI over stdlib urllib) |
+| `common/a2a.py` | `A2AMessage` envelope with `trace_id`, `new_investigation` |
+| `common/workers.py` | `TRIAGE_TOOLS` / `INVEST_TOOLS` / `REPORT_TOOLS`, `authorized_call`, the three workers |
+| `common/coordination.py` | `Delegation` + `MAX_HANDOFFS` (§8.3.3), `fan_out` + `merge` (§8.4) |
+| `common/graph.py` | §8.6: the same team as a LangGraph `StateGraph` (`build_team_graph`, `run_team_graph`, `checkpoints`) |
+| `demo.py` | Smoke test across every section; CI runs it |
 
-Run from the repo root: `python labs/chapter-08b-the-same-team-three-ways/demo.py`
+Run from the repo root: `python labs/chapter-08-multi-agent-systems/demo.py`
