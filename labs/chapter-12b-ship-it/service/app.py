@@ -25,11 +25,26 @@ from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 
 _LABS = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# The agent comes from Chapter 13's folder (capstone/, common/). Chapter 10's folder
+# has packages with the SAME names, so it must not go on sys.path; its observability
+# module is loaded by file path instead. Two chapters, no shadowing.
 sys.path.insert(0, os.path.join(_LABS, "chapter-13-assembling-aegis"))
-sys.path.insert(0, os.path.join(_LABS, "chapter-10-evaluation-and-observability"))
 from capstone.aegis.system import AegisV12                    # noqa: E402  Chapter 13
-from common import soc                                        # noqa: E402
-from interface.observability import build_tracer, export_findings  # noqa: E402  Chapter 10
+from common import soc                                        # noqa: E402  Chapter 13
+
+
+def _load_observability():
+    import importlib.util
+    path = os.path.join(_LABS, "chapter-10-evaluation-and-observability", "interface", "observability.py")
+    spec = importlib.util.spec_from_file_location("aegis_observability", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+observability = _load_observability()                          # Chapter 10, by path
+build_tracer, export_findings = observability.build_tracer, observability.export_findings
 
 from .config import load_settings                             # noqa: E402
 
@@ -40,8 +55,7 @@ app = FastAPI(title="Aegis", version=settings.service_version)
 # ---------------------------------------------------------------- tracing sink
 def _tracer():
     if settings.otlp_endpoint:
-        from interface.observability import otlp_tracer_from_env
-        return otlp_tracer_from_env(), None
+        return observability.otlp_tracer_from_env(), None
     return build_tracer()
 
 
