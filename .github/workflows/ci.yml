@@ -32,3 +32,4 @@ jobs:
           python labs/chapter-04-conversational-agents-slot-filling/demo.py
           python labs/chapter-05-memory/demo.py
           python labs/chapter-06-rag-grounding-aegis/demo.py
+          python labs/chapter-07-planning/demo.py
