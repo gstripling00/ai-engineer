@@ -9,6 +9,7 @@ for the runbook corpus) and imports the modules below.
 | `capstone/aegis/system.py` | `AegisV12` — every chapter's component in one pipeline; returns a `Run` (findings dict + tracer views). The same file ships in Chapter 10. |
 | `capstone/aegis/soc_formats.py` | Wazuh / Sigma / MISP fixtures and adapters: `from_wazuh`, `parse_sigma`, `routing_corpus_from_sigma`, `from_misp`, `reputation_from_misp` |
 | `interface/render.py` | `interface_contract`, `render_ticket_comment` |
+| `governance/report.py` | The ten AI-governance terms as predicates on one real run (`governance_report`, `--check`), plus `inventory()` and the dated `MODEL_CARDS`. Appendix I is generated from it by `tools/make_governance_appendix.py` |
 | `demo.py` | Smoke test across every section; CI runs it |
 
 Run from the repo root: `python labs/chapter-13-assembling-aegis/demo.py`

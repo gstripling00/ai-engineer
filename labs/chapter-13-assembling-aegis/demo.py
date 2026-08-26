@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import soc                                                                  # noqa: E402
 from capstone.aegis.system import AegisV12                                              # noqa: E402
 from interface.render import render_ticket_comment, interface_contract                  # noqa: E402
+from governance.report import governance_report                                         # noqa: E402
 from capstone.aegis.soc_formats import (WAZUH_ALERT, from_wazuh, SIGMA_RULE, parse_sigma,  # noqa: E402
                                         routing_corpus_from_sigma, MISP_EVENT, from_misp,
                                         reputation_from_misp)
@@ -53,6 +54,13 @@ def main() -> int:
     assert rep("198.51.100.7")["verdict"] == "reported" and not rep("198.51.100.7")["actionable"]
     assert rep("10.0.0.1")["verdict"] == "unknown"
     print("misp        ok  actionable vs reported vs unknown, with last_seen")
+
+    soc.reset_tickets()
+    system = AegisV12()
+    rows = governance_report(system.handle(soc.SEED_ALERT, raw_log=POISONED), system)
+    failed = [r["term"] for r in rows if not r["holds"]]
+    assert len(rows) == 10 and not failed, failed
+    print("governance  ok  all ten terms hold on the same hostile run; Appendix I regenerates from it")
     return 0
 
 
