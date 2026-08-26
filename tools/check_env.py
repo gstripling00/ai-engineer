@@ -27,6 +27,7 @@ REQUIRED = [
     ("langchain-community", "langchain_community", "RAGAS dependency — see the pin note"),
     ("google-adk", "google.adk", "Google Cloud agent track (Agent, Workflow)"),
     ("mcp", "mcp", "tool discovery and hardening (Ch 3, 9, 11)"),
+    ("a2a-sdk", "a2a", "agent-to-agent protocol (Lab 8C)"),
     ("openai", "openai", "the default real-model tier"),
     ("langchain-openai", "langchain_openai", "wires OpenAI into RAGAS"),
     ("ragas", "ragas.metrics.collections", "evaluation (Ch 10)"),
