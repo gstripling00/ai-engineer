@@ -23,7 +23,6 @@ from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events import EventQueue
 from a2a.server.request_handlers import DefaultRequestHandler
 from a2a.server.routes.agent_card_routes import create_agent_card_routes
-from a2a.server.routes.fastapi_routes import add_a2a_routes_to_fastapi
 from a2a.server.routes.jsonrpc_routes import create_jsonrpc_routes
 from a2a.server.tasks import InMemoryTaskStore, TaskUpdater
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface, AgentSkill, Role, SendMessageRequest, TaskState
@@ -102,8 +101,12 @@ def build_agent_app(name: str, url: str) -> FastAPI:
     handler = DefaultRequestHandler(agent_executor=WorkerExecutor(worker), task_store=InMemoryTaskStore(),
                                     agent_card=card)
     app = FastAPI(title=f"aegis-{name}")
-    add_a2a_routes_to_fastapi(app, agent_card_routes=create_agent_card_routes(card),
-                              jsonrpc_routes=create_jsonrpc_routes(handler, rpc_url="/"))
+    # Mount the SDK's Starlette routes directly. (The SDK also offers
+    # add_a2a_routes_to_fastapi(), which additionally decorates /docs with
+    # proto-derived schemas - but that path needs protobuf 6.x, and the pinned
+    # stack resolves protobuf 5.x on Colab. The protocol routes are identical.)
+    app.router.routes.extend(create_agent_card_routes(card))
+    app.router.routes.extend(create_jsonrpc_routes(handler, rpc_url="/"))
     return app
 
 # ---------------------------------------------------------------- the client side
