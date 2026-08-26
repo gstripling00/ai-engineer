@@ -1,0 +1,33 @@
+# Aegis + tracing. Run from the repo root:
+#   docker compose -f labs/chapter-12b-ship-it/docker-compose.yml up --build
+#
+# Langfuse is a multi-container system of its own (Postgres, ClickHouse, Redis, MinIO).
+# Run it from its own compose file - https://github.com/langfuse/langfuse - and point
+# Aegis at it with the three OTEL_EXPORTER_OTLP_* variables below (see Chapter 10's
+# langfuse_otlp_env()). Nothing in Aegis changes; only the environment does.
+services:
+  aegis:
+    build:
+      context: ../..
+      dockerfile: labs/chapter-12b-ship-it/Dockerfile
+    image: aegis:dev
+    ports:
+      - "8000:8000"
+    environment:
+      AEGIS_MODEL: ${AEGIS_MODEL:-mock}
+      AEGIS_VERSION: ${AEGIS_VERSION:-dev}
+      AEGIS_TIMEOUT_S: "10"
+      AEGIS_RATE_LIMIT_PER_MIN: "120"
+      # Uncomment to ship spans to Langfuse running on the host (or any OTLP collector):
+      # OTEL_EXPORTER_OTLP_ENDPOINT: http://host.docker.internal:3000/api/public/otel
+      # OTEL_EXPORTER_OTLP_HEADERS: "Authorization=Basic <base64 pk:sk>"
+      # OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      # OPENAI_API_KEY: ${OPENAI_API_KEY}        # only for AEGIS_MODEL=openai
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/healthz').status==200 else 1)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
