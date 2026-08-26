@@ -39,3 +39,6 @@ jobs:
           python labs/chapter-11-security-governance-enterprise-integration/demo.py
           python labs/chapter-12-deployment/demo.py
           python labs/chapter-13-assembling-aegis/demo.py
+          python labs/chapter-08b-the-same-team-three-ways/demo.py
+          python labs/chapter-11b-security-across-the-handoff/demo.py
+          python labs/chapter-12b-ship-it/demo.py
