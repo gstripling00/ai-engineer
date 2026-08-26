@@ -52,6 +52,10 @@ google-adk==2.4.0
 # Tool and agent interoperability (Ch 3 discovery, Ch 9 routing, Ch 11 hardening).
 mcp==1.28.1
 
+# Agent-to-agent interoperability (Optional Lab 8C): Google's A2A protocol. The
+# [fastapi] extra provides the server routes; the client needs only the core.
+a2a-sdk[fastapi]>=1.1
+
 # --- Model providers ---------------------------------------------------------
 # Keys come from the environment, never from a notebook cell. See tools/check_env.py.
 openai>=1.60
